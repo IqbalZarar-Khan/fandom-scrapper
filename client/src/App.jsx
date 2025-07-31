@@ -20,7 +20,7 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:8080');
+    const ws = new WebSocket('ws://fandom-scrapper.onrender.com');
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       setLogs((prev) => [...prev, data.message]);
@@ -31,7 +31,7 @@ function App() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/scrape/categories', { url });
+      const response = await axios.post('https://fandom-scrapper.onrender.com/api/scrape/categories', { url });
       setCategories(response.data);
     } catch (error) {
       setLogs((prev) => [...prev, `Error fetching categories: ${error.message}`]);
@@ -44,14 +44,14 @@ function App() {
     setLogs([]);
     const lastItem = path[path.length - 1];
     if (lastItem?.href) {
-      const response = await axios.post('http://localhost:5000/api/scrape/page', { url: lastItem.href });
+      const response = await axios.post('https://fandom-scrapper.onrender.com/api/scrape/page', { url: lastItem.href });
       setContent(response.data);
     }
   };
 
   const handleDownload = async () => {
     setIsModalOpen(true);
-    await axios.post('http://localhost:5000/api/scrape/download', {
+    await axios.post('https://fandom-scrapper.onrender.com/api/scrape/download', {
       content,
       format,
       filename: 'scraped_content'
